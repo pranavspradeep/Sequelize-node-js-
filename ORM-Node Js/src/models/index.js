@@ -21,8 +21,10 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
+//model tables
 db.tutorial = require("./tutorial.model.js")(sequelize, Sequelize);
 db.user =  require("./user.model.js")(sequelize, Sequelize);
+//relationships
+db.user.hasMany(db.tutorial);
 
 module.exports = db;

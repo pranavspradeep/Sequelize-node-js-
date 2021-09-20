@@ -31,6 +31,31 @@ app.get("/", (req, res) => {
 //routes
 require("./src/routes/turorial.routes")(app);
 require("./src/routes/user.routes")(app);
+//Swagger configs
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+const options = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "Tutorial API",
+			version: "1.0.0",
+			description: "A simple Express Tutorial API",
+		},
+		servers: [
+			{
+				url: "http://localhost:8080",
+			},
+		],
+	},
+	apis: ["./src/routes/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
+
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

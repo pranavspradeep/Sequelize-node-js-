@@ -1,5 +1,7 @@
+const { tutorial } = require("../models");
 const db = require("../models");
 const User = db.user;
+const Tutorials = db.tutorial;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
@@ -140,9 +142,9 @@ exports.deleteAll = (req, res) => {
 };
 
 // Find all published Tutorials
-exports.findAllPublished = (req, res) => {
+
   exports.findAllPublished = (req, res) => {
-    User.findAll({ where: { published: true } })
+    User.findAll({ where: { userStatus: true } })
       .then(data => {
         res.send(data);
       })
@@ -152,5 +154,23 @@ exports.findAllPublished = (req, res) => {
             err.message || "Some error occurred while retrieving User."
         });
       });
-  };
-};
+  
+    };
+  
+// Find all user Tutorials
+exports.findUserTutorials = async (req, res) => {
+
+  const users = await User.findAll({ include:{model:Tutorials, where: {
+    userID:  req.params.id
+  }}  }).then(data=>{
+    res.send(data);
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving User."
+    })
+  })
+}
+  
+ 
+    
